@@ -1,0 +1,11 @@
+--- eclipse-installer/eclipse-install-script	2018-10-13 00:11:09.919097815 +0000
++++ eclipse-installer/eclipse-install-script	2018-10-13 00:11:26.213756641 +0000
+@@ -34,7 +34,7 @@
+ ## begin ## meta-data
+ readonly __APPNAME=$( basename "${BASH_SOURCE[0]}" )
+ readonly __APPVERSION=1.4
+-readonly __SUPPORTED_OS=(MAC LINUX-DEBIAN)
++readonly __SUPPORTED_OS=(MAC LINUX-DEBIAN LINUX-REDHAT)
+ readonly __SUPPORTED_ARCH=(x86_64 x86)
+ readonly __DEBUG=FALSE
+ readonly __CREATENEWLOG=TRUE
