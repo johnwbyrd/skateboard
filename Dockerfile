@@ -1,13 +1,13 @@
-FROM consol/centos-xfce-vnc
+FROM chenjr0719/ubuntu-unity-novnc
 ENV USER skateboard \
     HOME /home/skateboard
 USER 0
-RUN yum -y upgrade \
-    && yum -y groupinstall "Development Tools" \
-    && yum install -y qemu wget zip git bc ncurses-devel perl-devel \
-       java-1.8.0-openjdk nano \
-    && useradd -ms /bin/bash skateboard
-RUN cd /home/skateboard \
+RUN apt-get -y update \
+    && apt-get -y install apt-utils
+RUN apt-get install -y build-essential cpio qemu aqemu wget zip git bc \ 
+    libncurses-dev perl libmodule-install-perl nano default-jdk \
+    && adduser --disabled-password --gecos "" skateboard \
+    && cd /home/skateboard \
     && mkdir scripts \
     && mkdir patches
 COPY scripts/* /home/skateboard/scripts/

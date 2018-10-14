@@ -1,4 +1,5 @@
 #!/bin/bash
+set -e
 BUILDROOT_GIT=https://github.com/buildroot/buildroot.git
 
 ECLIPSE_URL=https://www.eclipse.org/downloads/download.php
@@ -30,29 +31,33 @@ done
 echo "build_buildroot=$build_buildroot, build_eclipse=$build_eclipse"
 
 if [[ $build_buildroot -eq 1 ]]; then
+    mkdir -p 3p/buildroot
     git clone $BUILDROOT_GIT
-    pushd buildroot
+    pushd 3p/buildroot
     make qemu_arm_versatile_nommu_defconfig
     make
     popd
 fi
 
 if [[ $build_eclipse -eq 1 ]]; then
-    mkdir eclipse-installer
-    pushd eclipse-installer
+    mkdir 3p/eclipse-installer
+    pushd 3p/eclipse-installer
     wget -q -O eclipse-install-script $ECLIPSE_INSTALLER
     chmod 755 eclipse-install-script
-    patch eclipse-install-script < ../patches/eclipse-installer-linux-redhat.01.patch
-    popd
+    patch eclipse-install-script < \
+          ../../patches/eclipse-installer-linux-redhat.01.patch
+    cd ..
     ./eclipse-installer/eclipse-install-script eclipse
+    popd
 fi
 
-VNC_ADDRESS="$(ifconfig | perl -ne '/\d+\.\d+\.\d+\.\d+/ && print($&) && exit(0)')"
-echo "To connect to this container, you can:" 
-echo "1. connect via VNC viewer ${VNC_ADDRESS}:5901"
-echo "   default password: vncpassword"
-echo "2. connect via noVNC HTML5 full client: " 
-echo "   http://${VNC_ADDRESS}:6901/vnc.html, default password: vncpassword"
-echo "3. connect via noVNC HTML5 lite client: "
-echo "   http://${VNC_ADDRESS}:6901/?password=vncpassword"
-
+if [[ false ]]; then
+    VNC_ADDRESS="$(ifconfig | perl -ne '/\d+\.\d+\.\d+\.\d+/ && print($&) && exit(0)')"
+    echo "To connect to this container, you can:" 
+    echo "1. connect via VNC viewer ${VNC_ADDRESS}:5901"
+    echo "   default password: vncpassword"
+    echo "2. connect via noVNC HTML5 full client: " 
+    echo "   http://${VNC_ADDRESS}:6901/vnc.html, default password: vncpassword"
+    echo "3. connect via noVNC HTML5 lite client: "
+    echo "   http://${VNC_ADDRESS}:6901/?password=vncpassword"
+fi
