@@ -1,7 +1,7 @@
 # Overview
 
-*This repository does not do anything useful at this time.  Please come back
-later.*
+*This repository does not do anything useful at this time.  Do not 
+get excited. Please come back later.*
 
 This repository hosts early experiments for an emulation of an ARMv5TE
 hosted on 6502.  
