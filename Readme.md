@@ -77,8 +77,12 @@ Phases of development involve the following.
    
 # Docker notes
 
+Run scripts/update-build-environment from the root.
+
+To run the result on qemu, try:
+
+`qemu-system-arm -M versatilepb -kernel output/images/zImage -dtb output/images/versatile-pb.dtb -append "console=ttyAMA0,38400" -serial stdio -net user -net nic,model=smc91c111`
+
 A Dockerfile has been created that sets up a minimal Ubuntu environment 
 sufficient for compiling the world.
 
-sudo docker exec $CONTAINER_ID cat /home/ubuntu/password.txt
-sudo docker run -itd -p 80:6080 -e PASSWORD=$YOUR_PASSWORD $DOCKER_ID
