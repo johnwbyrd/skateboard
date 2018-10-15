@@ -17,6 +17,7 @@ RUN cd /home/skateboard \
     && chmod 755 scripts/*
 USER skateboard
 WORKDIR /home/skateboard
+RUN /bin/bash scripts/update-build-environment
 EXPOSE 5901
 EXPOSE 6901
 SHELL ["/bin/bash"]
