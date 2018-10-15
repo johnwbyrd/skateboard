@@ -1,4 +1,4 @@
-FROM chenjr0719/ubuntu-unity-novnc
+FROM ubuntu:18.04
 ENV USER skateboard \
     HOME /home/skateboard
 USER 0
@@ -6,6 +6,7 @@ RUN apt-get -y update \
     && apt-get -y install apt-utils
 RUN apt-get install -y build-essential cpio qemu aqemu wget zip git bc \ 
     libncurses-dev perl libmodule-install-perl nano default-jdk \
+    file eclipse python rsync \
     && adduser --disabled-password --gecos "" skateboard \
     && cd /home/skateboard \
     && mkdir scripts \
