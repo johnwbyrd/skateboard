@@ -59,6 +59,13 @@ Phases of development involve the following.
       the best case, which is the REU's DMA-like behavior for reads
       and writes.
 
+   3. Build some of the necessary components for the emulator that are
+      used regardless of whether in ARM or Thumb modes.  There are only 31
+      total 32 bit registers in ARM, so most of that can go into zero page.
+      Mode handling should be an abstraction.  The special things that ARM
+      can do is conditionally execute any instruction based on processor 
+      flags, the A operand, and the barrel shifted B operand.
+
 5. If necessary, write thunk layer for ARM emulator to access virtual
    block driver to emulate SD/MMC or the like.
 
