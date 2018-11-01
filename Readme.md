@@ -6,9 +6,14 @@ get excited. Please come back later.*
 This repository hosts early experiments for an emulation of an ARMv5TE
 hosted on 6502.  
 
-This experiment is hosted on Ubuntu 18.04.  A Dockerfile is provided
-that sets up a Docker host with all requirements.  Please see the Dockerfile
-if you are setting up an interactive environment.
+This experiment is hosted on Ubuntu 18.04.  Use cmake to build:
+
+`mkdir build`
+`cd build`
+`cmake`
+`make`
+
+A Dockerfile is provided that sets up a Docker host with all requirements.
 
 # Phases of development
 
@@ -83,8 +88,6 @@ Phases of development involve the following.
 8. Get some poor soul to run the result on practical hardware.
    
 # Docker notes
-
-Run scripts/update-build-environment from the root.
 
 To run the result on qemu, try:
 
