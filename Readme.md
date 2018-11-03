@@ -6,7 +6,8 @@ get excited. Please come back later.*
 This repository hosts early experiments for an emulation of an ARMv5TE
 hosted on 6502.  
 
-This experiment is hosted on Ubuntu 18.04.  Use cmake to build:
+This experiment is hosted on Ubuntu 18.04.  First, install prerequisite
+packages by running scripts/install-prerequisites.  Then, use cmake to build:
 
 `mkdir build`
 `cd build`
@@ -89,9 +90,13 @@ Phases of development involve the following.
    
 # Docker notes
 
-To run the result on qemu, try:
+To run the result on qemu with no mmu, try:
 
 `qemu-system-arm -M versatilepb -kernel output/images/zImage -dtb output/images/versatile-pb.dtb -append "console=ttyAMA0,38400" -serial stdio -net user -net nic,model=smc91c111`
+
+or, for an mmu, try:
+
+`qemu-system-arm -M versatilepb -kernel output/images/zImage -dtb output/images/versatile-pb.dtb -drive file=output/images/rootfs.ext2,if=scsi -append "root=/dev/sda console=ttyAMA0,115200" -nographic`
 
 A Dockerfile has been created that sets up a minimal Ubuntu environment 
 sufficient for compiling the world.
