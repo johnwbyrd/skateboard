@@ -20,12 +20,13 @@ A Dockerfile is provided that sets up a Docker host with all requirements.
 
 Phases of development involve the following.
 
-1. Bring up buildroot on qemu targeting the arm_versatile_nommu_defconfig
-   environment.  Make sure to be able to single-step through debuggable
+1. Bring up buildroot on qemu targeting the qemu_arm_versatile_defconfig
+   environment. (Done, works in 15MB of memory with MMU enabled)
+
+   1. Make sure to be able to single-step through debuggable
    kernel.
 
-2. Reduce total RAM/ROM usage to 16MB or lower.  Remove any drivers not
-   necessary for kernel bringup.
+2. Remove as many drivers as possible 
 
    1. There are alternatives to buildroot, but they have done much of 
       the heavy lifting for size reduction and nommu patches for 
@@ -90,13 +91,9 @@ Phases of development involve the following.
    
 # Docker notes
 
-To run the result on qemu with no mmu, try:
+To run this system on qemu, try:
 
-`qemu-system-arm -M versatilepb -kernel output/images/zImage -dtb output/images/versatile-pb.dtb -append "console=ttyAMA0,38400" -serial stdio -net user -net nic,model=smc91c111`
-
-or, for an mmu, try:
-
-`qemu-system-arm -M versatilepb -kernel output/images/zImage -dtb output/images/versatile-pb.dtb -drive file=output/images/rootfs.ext2,if=scsi -append "root=/dev/sda console=ttyAMA0,115200" -nographic`
+`qemu-system-arm -M versatilepb -kernel output/images/zImage -dtb output/images/versatile-pb.dtb -drive file=output/images/rootfs.ext2 -append "root=/dev/sda console=ttyAMA0,115200" -nographic -m 15 -net user -net nic,model=rtl8139`
 
 A Dockerfile has been created that sets up a minimal Ubuntu environment 
 sufficient for compiling the world.
