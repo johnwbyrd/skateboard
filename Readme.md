@@ -9,10 +9,12 @@ hosted on 6502.
 This experiment is hosted on Ubuntu 18.04.  First, install prerequisite
 packages by running scripts/install-prerequisites.  Then, use cmake to build:
 
-`mkdir build`
-`cd build`
-`cmake`
-`make`
+```
+mkdir build
+cd build
+cmake
+make
+```
 
 A Dockerfile is provided that sets up a Docker host with all requirements.
 
@@ -28,11 +30,7 @@ Phases of development involve the following.
 
 2. Remove as many drivers as possible 
 
-   1. There are alternatives to buildroot, but they have done much of 
-      the heavy lifting for size reduction and nommu patches for 
-      the arm_versatile_nommu platform.
-
-   2. There is a bunch of interrupt hardware on the arm_versatile_pb.
+   1. There is a bunch of interrupt hardware on the arm_versatile_pb.
       We want to see how little we can get away with emulating.  If we
       do have to emulate, then we have to check every memory write and read
       against the emulated hardware, and this will slow us down a great
@@ -72,6 +70,13 @@ Phases of development involve the following.
       Mode handling should be an abstraction.  The special things that ARM
       can do is conditionally execute any instruction based on processor 
       flags, the A operand, and the barrel shifted B operand.
+
+   4. Unfortunately, the nommu version of buildroot is not terribly stable,
+      and has trouble running even a few programs.  ARM MMU emulation will
+      slow down the 6502 implementation enormously, but the good news
+      is that a) we will have an extra 1 MB available if we need it for 
+      other stuff, and b) we only need to get enough of the MMU emulation
+      working to make Linux happy.
 
 5. If necessary, write thunk layer for ARM emulator to access virtual
    block driver to emulate SD/MMC or the like.
