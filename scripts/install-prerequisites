@@ -1,6 +1,4 @@
 #/bin/bash
-USER=skateboard
-HOME=/home/$USER
 set -e
 set +x 
 set +v
