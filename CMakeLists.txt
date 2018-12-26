@@ -3,6 +3,10 @@ project(skateboard)
 
 include(ExternalProject)
 
+find_program(QEMU_SYSTEM_ARM qemu-system-arm
+	DOC "Path to qemu-system-arm"
+)
+
 ExternalProject_Add(buildroot
 	PREFIX buildroot
 	GIT_REPOSITORY https://github.com/buildroot/buildroot.git
@@ -13,6 +17,26 @@ ExternalProject_Add(buildroot
 	BUILD_COMMAND cd <BINARY_DIR> && make
 	INSTALL_COMMAND ""
 	TEST_COMMAND ""
+	STEP_TARGETS debug
+)
+
+ExternalProject_Add_Step( buildroot debug
+	COMMAND ${QEMU_SYSTEM_ARM} 
+		-M versatilepb 
+		-kernel images/zImage
+		-dtb images/versatile-pb.dtb
+		-drive file=images/rootfs.ext2
+		-append "root=/dev/sda console=ttyAMA0,115200" 
+		-nographic 
+		-m 15 
+		-net user 
+		-net nic,model=rtl8139
+ 	COMMENT "Launching qemu-system-arm debugging session..."
+	ALWAYS True
+	EXCLUDE_FROM_MAIN True
+	WORKING_DIRECTORY <BINARY_DIR>
+	USES_TERMINAL True
+	DEPENDEES build
 )
 
 ExternalProject_add(cc65
