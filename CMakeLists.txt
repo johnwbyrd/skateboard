@@ -6,6 +6,17 @@ include(ExternalProject)
 find_program(QEMU_SYSTEM_ARM qemu-system-arm
 	DOC "Path to qemu-system-arm"
 )
+set( BUILDROOT_DEFCONFIG_DIR 
+	${CMAKE_CURRENT_SOURCE_DIR}/config/buildroot/configs )
+set( BUILDROOT_DEFCONFIG_FILE 
+	${BUILDROOT_CONFIG_DIR}/skateboard_defconfig 
+)
+execute_process(
+	COMMAND grep 
+		-Po 'BR2_LINUX_KERNEL_VERSION="\\K[^"]*' 
+		${BUILDROOT_DEFCONFIG_FILE}
+	OUTPUT_VARIABLE BUILDROOT_LINUX_KERNEL_VERSION
+)
 
 ExternalProject_Add(buildroot
 	PREFIX buildroot
@@ -17,11 +28,12 @@ ExternalProject_Add(buildroot
 	BUILD_COMMAND cd <BINARY_DIR> && make
 	INSTALL_COMMAND ""
 	TEST_COMMAND ""
-	STEP_TARGETS debug
+	STEP_TARGETS qemu gdb
 )
 
-ExternalProject_Add_Step( buildroot debug
+ExternalProject_Add_Step( buildroot qemu
 	COMMAND ${QEMU_SYSTEM_ARM} 
+		-gdb tcp::1234
 		-M versatilepb 
 		-kernel images/zImage
 		-dtb images/versatile-pb.dtb
@@ -36,7 +48,19 @@ ExternalProject_Add_Step( buildroot debug
 	EXCLUDE_FROM_MAIN True
 	WORKING_DIRECTORY <BINARY_DIR>
 	USES_TERMINAL True
-	DEPENDEES build
+)
+
+ExternalProject_Add_Step(buildroot gdb
+	COMMAND <BINARY_DIR>/host/bin/arm-linux-gdb
+		-s
+		-S
+		-x 
+		<BINARY_DIR>/host/arm-buildroot-linux-musleabi/sysroot/usr/share/buildroot/gdbinit
+	COMMENT "Launching arm-linux-gdb, please make sure target is running..."
+	ALWAYS True
+	EXCLUDE_FROM_MAIN True
+	WORKING_DIRECTORY <BINARY_DIR>
+	USES_TERMINAL True
 )
 
 ExternalProject_add(cc65
