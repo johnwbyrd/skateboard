@@ -3,9 +3,6 @@ project(skateboard)
 
 include(ExternalProject)
 
-find_program(QEMU_SYSTEM_ARM qemu-system-arm
-	DOC "Path to qemu-system-arm"
-)
 set( BUILDROOT_DEFCONFIG_DIR 
 	${CMAKE_CURRENT_SOURCE_DIR}/config/buildroot/configs )
 set( BUILDROOT_DEFCONFIG_FILE 
@@ -32,8 +29,8 @@ ExternalProject_Add(buildroot
 )
 
 ExternalProject_Add_Step( buildroot qemu
-	COMMAND ${QEMU_SYSTEM_ARM} 
-		-gdb tcp::1234
+	COMMAND <BINARY_DIR>/host/bin/qemu-system-arm
+		-s
 		-M versatilepb 
 		-kernel images/zImage
 		-dtb images/versatile-pb.dtb
