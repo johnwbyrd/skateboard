@@ -6,10 +6,10 @@ include(ExternalProject)
 set( BUILDROOT_DEFCONFIG_DIR 
 	${CMAKE_CURRENT_SOURCE_DIR}/config/buildroot/configs )
 set( BUILDROOT_DEFCONFIG_FILE 
-	${BUILDROOT_CONFIG_DIR}/skateboard_defconfig 
+	${BUILDROOT_DEFCONFIG_DIR}/skateboard_defconfig 
 )
 execute_process(
-	COMMAND grep 
+	COMMAND echo grep 
 		-Po 'BR2_LINUX_KERNEL_VERSION="\\K[^"]*' 
 		${BUILDROOT_DEFCONFIG_FILE}
 	OUTPUT_VARIABLE BUILDROOT_LINUX_KERNEL_VERSION
@@ -21,7 +21,11 @@ ExternalProject_Add(buildroot
         GIT_TAG 2018.11
 	BUILD_IN_SOURCE False
 	GIT_PROGRESS True
-	CONFIGURE_COMMAND make -C <SOURCE_DIR> O=<BINARY_DIR> BR2_EXTERNAL=${CMAKE_CURRENT_SOURCE_DIR}/config/buildroot skateboard_defconfig
+	CONFIGURE_COMMAND make 
+		-C <SOURCE_DIR> 
+		O=<BINARY_DIR> 
+		BR2_EXTERNAL=${CMAKE_CURRENT_SOURCE_DIR}/config/buildroot 
+		skateboard_defconfig
 	BUILD_COMMAND cd <BINARY_DIR> && make
 	INSTALL_COMMAND ""
 	TEST_COMMAND ""
@@ -29,17 +33,19 @@ ExternalProject_Add(buildroot
 )
 
 ExternalProject_Add_Step( buildroot qemu
-	COMMAND <BINARY_DIR>/host/bin/qemu-system-arm
-		-s
+	COMMAND QEMU_AUDIO_DRV=none ;
+		<BINARY_DIR>/host/bin/qemu-system-arm
 		-M versatilepb 
-		-kernel images/zImage
-		-dtb images/versatile-pb.dtb
-		-drive file=images/rootfs.ext2
-		-append "root=/dev/sda console=ttyAMA0,115200" 
+		-kernel <BINARY_DIR>/images/zImage
+		-dtb <BINARY_DIR>/images/versatile-pb.dtb
+		-drive file=<BINARY_DIR>/images/rootfs.ext2
+		-append "root=/dev/sda console=ttyAMA0,115200"
 		-nographic 
 		-m 15 
 		-net user 
 		-net nic,model=rtl8139
+		-s 
+		-S
  	COMMENT "Launching qemu-system-arm debugging session..."
 	ALWAYS True
 	EXCLUDE_FROM_MAIN True
@@ -47,12 +53,13 @@ ExternalProject_Add_Step( buildroot qemu
 	USES_TERMINAL True
 )
 
+# todo: get the linux kernel version from skateboard_defconfig or from the 
+# directory structure
+
 ExternalProject_Add_Step(buildroot gdb
 	COMMAND <BINARY_DIR>/host/bin/arm-linux-gdb
-		-s
-		-S
-		-x 
-		<BINARY_DIR>/host/arm-buildroot-linux-musleabi/sysroot/usr/share/buildroot/gdbinit
+		-x <BINARY_DIR>/host/arm-buildroot-linux-musleabi/sysroot/usr/share/buildroot/gdbinit
+		-ex 'file <BINARY_DIR>/build/linux-4.18.20/vmlinux'
 	COMMENT "Launching arm-linux-gdb, please make sure target is running..."
 	ALWAYS True
 	EXCLUDE_FROM_MAIN True
