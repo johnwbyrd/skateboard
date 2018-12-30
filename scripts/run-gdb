@@ -2,4 +2,7 @@
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 echo ${SCRIPT_DIR}
 source ${SCRIPT_DIR}/setup-gdbinit
+export TERMINFO=/lib/terminfo
+pushd ${BUILDROOT_DIR}
 ${GDB_PATH} -x ${GDBINIT_PATH}
+popd

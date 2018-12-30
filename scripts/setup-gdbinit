@@ -13,6 +13,8 @@ BR2_LINUX_KERNEL_VERSION="$( grep -Po 'BR2_LINUX_KERNEL_VERSION=\"\K[^\"]*' ${SK
 echo ${BR2_LINUX_KERNEL_VERSION}
 BUILDROOT_BUILD_DIR="${ROOT_DIR}/build/buildroot/src/buildroot-build"
 echo ${BUILDROOT_BUILD_DIR}
+BUILDROOT_DIR="${ROOT_DIR}/build/buildroot/src/buildroot"
+echo ${BUILDROOT_DIR}
 SYSROOT="$( realpath "$( find ${BUILDROOT_BUILD_DIR}/host -name sysroot -print )" )" 
 echo ${SYSROOT}
 VMLINUX_DIR="${BUILDROOT_BUILD_DIR}/build/linux-${BR2_LINUX_KERNEL_VERSION}"
@@ -24,5 +26,8 @@ GDB_PATH="${BUILDROOT_BUILD_DIR}/host/bin/arm-linux-gdb"
 echo ${GDB_PATH}
 echo "set sysroot ${SYSROOT}" > ${GDBINIT_PATH}
 echo "file ${VMLINUX_PATH}" >> ${GDBINIT_PATH}
+echo "target remote localhost:1234" >> ${GDBINIT_PATH}
+echo "b start_kernel" >> ${GDBINIT_PATH}
+echo "c" >> ${GDBINIT_PATH}
 QEMU_COMMAND="${BUILDROOT_BUILD_DIR}/host/bin/qemu-system-arm -M versatilepb -kernel ${BUILDROOT_BUILD_DIR}/images/zImage -dtb ${BUILDROOT_BUILD_DIR}/images/versatile-pb.dtb -drive format=raw,file=${BUILDROOT_BUILD_DIR}/images/rootfs.ext2 -append \"root=/dev/sda console=ttyAMA0,115200\" -nographic -m 15 -net user -net nic,model=rtl8139"
 echo ${QEMU_COMMAND}
