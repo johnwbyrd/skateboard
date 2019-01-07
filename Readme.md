@@ -18,18 +18,23 @@ A Dockerfile is provided that sets up a Docker host with all requirements.
 
 # Usage
 
+In addition to the normal make command from the build directory:
+
+    make
+
 From within the build directory that you created above, the following
 commands may be used:
 
     make buildroot-qemu
 
-Launches an instance of qemu with a breakpoint set at the entry function
-for debugging Linux.
+make buildroot-qemu launches an instance of qemu with a breakpoint set at the
+entry function for debugging Linux.
 
     make buildroot-gdb
 
-Launch an instance of gdb and try to connect to an instance of qemu on
-the local machine.
+make buildroot-gdb launches an instance of gdb and tries to connect to an
+instance of qemu on the local machine. Run this in a different process than
+make buildroot-qemu.
 
 # Phases of development
 
@@ -40,7 +45,11 @@ Phases of development involve the following.
 
 2. Make sure to be able to single-step through debuggable kernel. (Done)
 
-3. Remove as many drivers as possible
+3. Get source-level kernel debugging working with Eclipse. This is technically
+   not required, but it's source level debugging and will save so much time later.
+   See verbose console mode to debug communication with qemu.
+
+4. Remove as many drivers as possible.
 
    - There is a bunch of interrupt hardware on the arm_versatile_pb. We want to
      see how little we can get away with emulating. If we do have to emulate,
@@ -53,10 +62,10 @@ Phases of development involve the following.
      possibly only use a tiny interrupt controller, and also remove all the
      graphics peripherals and the like.
 
-4. Fork 6502 dummy target on cc65 to be new ARMv5TE emulator. Add gdb ARM stub
+5. Fork 6502 dummy target on cc65 to be new ARMv5TE emulator. Add gdb ARM stub
    to open a debug port on this emulator.
 
-5. Write ARM emulator in cc65 with dummy 6502 as target. Develop ARM instruction
+6. Write ARM emulator in cc65 with dummy 6502 as target. Develop ARM instruction
    decoder first, followed by THUMB decoder if necessary. Write thunk layers for
    16MB memory access, as well as I/O drivers for keyboard and terminal, and
    possibly a network transport layer.
@@ -101,17 +110,17 @@ Phases of development involve the following.
      have an extra 1 MB available if we need it for other stuff, and b) we only
      need to get enough of the MMU emulation working to make Linux happy.
 
-6. Write thunk layer for ARM emulator to access virtual I/O from dummy block
+7. Write thunk layer for ARM emulator to access virtual I/O from dummy block
    driver to emulate SD/MMC or the like.
 
    - Linux purposely keeps block drivers simple. This could be brought up using
      an IDE64
 
-7. Single-step through new ARM emulator using gdb, using qemu as a reference
+8. Single-step through new ARM emulator using gdb, using qemu as a reference
    emulator. Possibly, script operation of two gdb instances, run in parallel, and
    compare outputs.
 
-8. Port emulator to Commodore 64 using vice as a testbed. Write drivers for
+9. Port emulator to Commodore 64 using vice as a testbed. Write drivers for
    Commodore 16MB REU and for IDE64 and possibly for Ethernet driver (?!). Run vice
    in warp mode for testing.
 
@@ -119,7 +128,7 @@ Phases of development involve the following.
      able to map the chipset's memory space into emulated memory, and have Linux
      drive the cs89x0 chip directly (!).
 
-9) Get some poor soul to run the result on practical hardware.
+10. Get some poor soul to run the result on practical hardware.
 
 # Docker notes
 
