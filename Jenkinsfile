@@ -3,9 +3,9 @@ pipeline {
         dockerfile true
     }
     stages {
-        stage('Test') {
+        stage('date') {
             steps {
-                sh 'node --version'
+                sh 'date'
             }
         }
     }
