@@ -124,11 +124,18 @@ Phases of development involve the following.
 6. Allow the gdb stub to get virtual register states and memory states out of
    the emulator.
 
-7. Get dwelch67's examples running.
+7. Set up the emulator to be able to run in two modes. The first mode would
+   permit the ARM emulator to run on the development machine itself, using
+   normal source debugging. The second mode would permit the ARM emulator
+   to run on the virtual 6502, compiled by cc65 from the same source
+   code used in the first mode. The bring-up test would involve running
+   the ARM emulator from an imaginary memory filled with no-op instructions
 
-8. Remove as many drivers as possible.
+7) Get dwelch67's examples running.
 
-9. Write ARM emulator in cc65 with dummy 6502 as target. Develop ARM instruction
+8) Remove as many drivers as possible.
+
+9) Write ARM emulator in cc65 with dummy 6502 as target. Develop ARM instruction
    decoder first, followed by THUMB decoder if necessary. Write thunk layers for
    16MB memory access, as well as I/O drivers for keyboard and terminal, and
    possibly a network transport layer.
@@ -167,15 +174,15 @@ Phases of development involve the following.
      have an extra 1 MB available if we need it for other stuff, and b) we only
      need to get enough of the MMU emulation working to make Linux happy.
 
-10. Single-step through new ARM emulator using gdb, using qemu as a reference
+10) Single-step through new ARM emulator using gdb, using qemu as a reference
     emulator. Possibly, script operation of two gdb instances, run in parallel, and
     compare outputs.
 
-11. Port emulator to Commodore 64 using vice as a testbed. Write drivers for
+11) Port emulator to Commodore 64 using vice as a testbed. Write drivers for
     Commodore 16MB REU and for IDE64 and possibly for Ethernet driver (?!). Run vice
     in warp mode for testing.
 
-12. Get some poor soul to run the result on practical hardware.
+12) Get some poor soul to run the result on practical hardware.
 
 # Docker notes
 
