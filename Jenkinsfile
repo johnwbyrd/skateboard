@@ -3,7 +3,11 @@ node {
 
     docker.withRegistry('https://registry.hub.docker.com', 'dockerhub-jbyrd') {
 
-        def customImage = docker.build("skateboard:${env.BUILD_ID}")
+        def customImage = docker.build("jbyrd/skateboard:${env.BUILD_ID}")
+
+	customImage.inside {
+		sh 'date'
+	}
 
         /* Push the container to the custom Registry */
         customImage.push()
