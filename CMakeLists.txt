@@ -18,7 +18,7 @@ execute_process(
 ExternalProject_Add(buildroot
 	PREFIX buildroot
 	GIT_REPOSITORY https://github.com/buildroot/buildroot.git
-        GIT_TAG 2018.11
+        GIT_TAG 2019.02.x
 	BUILD_IN_SOURCE False
 	GIT_PROGRESS True
 	CONFIGURE_COMMAND make 
