@@ -85,27 +85,46 @@ You may be able to get indexing working with your project, but in my case Eclips
 
 - Verify that buildroot builds correctly by selecting Project > Build Project.
 
+- Run Window > Preferences, select the Run / Debug tab, and then select the String Substitution tab. Create two new string substitution variables in this window.
+
+  - The first should be "buildroot_build" and it should contain the absolute full path to the buildroot_build directory. This typically resides at skateboard/build/buildroot/src/buildroot-build .
+
+  - Next, create a string variable called "linux_version". Assign this variable a value in the form X.XX.XXX where these numbers are appropriate for the current version of Linux being used by buildroot. You can find this version by running skateboard/scripts/show-linux-version .
+
 - Create a debug configuration by selecting Run > Debug Configurations... Select GDB Hardware Debug, and then click on the New icon above it (New launch configuration). For Name, enter QEMU Debug. Project should be set to "buildroot-build".
 
-- We would prefer to use variables here, but they do not seem to work as designed in Eclipse. For C/C++ Application, enter the full path to the vmlinux file created as part of the build process. This normally resides at skateboard/build/buildroot/src/buildroot-build/linux-X.XX.XXX/vmlinux, where X.XX.XXX can be deteremined by running the skateboard/scripts/show-linux-version command. Click Disable auto build.
+- For C/C++ Application, enter the following:
 
-- Click on the Debugger tab. For GDB Command, enter the full path to the arm-linux-gdb program, which normally resides at skateboard/build/buildroot/src/buildroot-build/host/bin/arm-linux-gdb .
+```
+${buildroot_build}/build/linux-${linux_version}/vmlinux
+```
+
+- Click Disable auto build.
+
+- Click on the Debugger tab. For GDB Command, enter the following:
+
+```
+${buildroot_build}/host/bin/arm-linux-gdb
+```
 
 - Under Remote Target, enable Use remote target, enable Remote timeout (seconds), and set the timeout to 2 seconds.
 
 - Select the Startup tab. Under Initialization commands, enter the following information:
 
-  set sysroot .../buildroot-build/host/arm-skateboard-linux-musleabi/sysroot
-  file .../buildroot-build/build/linux-X.XX.XXX/vmlinux
-  b start_kernel
-
-- Replace any ... above with the full path to the buildroot-build directory. Also, replace X.XX.XXX with the version of Linux you are building.
+```
+add-auto-load-safe-path ${buildroot_build}/build/linux-${linux_version}/
+set sysroot ${buildroot_build}/host/arm-buildroot-linux-musleabi/sysroot
+cd ${buildroot_build}/build/linux-${linux_version}
+file ${buildroot_build}/build/linux-${linux_version}/vmlinux
+```
 
 - Under Load image and symbols, deselect Load image. Select Load symbols and select Use project binary.
 
 - Under Run commands..., enable Set breakpoint at: and enter "start_kernel".
 
 - Click Apply and then click Close.
+
+To execute a debugging session with qemu and with eclipse, use the method described above to launch qemu. Then, debug the program with the QEMU Debug configuration you just created. The lx-symbols and the lx-dmesg command both work from the debugger console.
 
 # Usage
 
