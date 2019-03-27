@@ -95,7 +95,9 @@ You may be able to get indexing working with your project, but in my case Eclips
 
 - Select the Startup tab. Under Initialization commands, enter the following information:
 
-  set sysroot .../buildroot-build/host/arm-skateboard-linux-musleabi/sysroot file .../buildroot-build/build/linux-X.XX.XXX/vmlinux b start_kernel
+  set sysroot .../buildroot-build/host/arm-skateboard-linux-musleabi/sysroot
+  file .../buildroot-build/build/linux-X.XX.XXX/vmlinux
+  b start_kernel
 
 - Replace any ... above with the full path to the buildroot-build directory. Also, replace X.XX.XXX with the version of Linux you are building.
 
@@ -187,11 +189,11 @@ Phases of development involve the following.
 
 - Unfortunately, the nommu version of buildroot is not terribly stable, and has trouble running even a few programs. ARM MMU emulation will slow down the 6502 implementation enormously, but the good news is that a) we will have an extra 1 MB available if we need it for other stuff, and b) we only need to get enough of the MMU emulation working to make Linux happy.
 
-10) Single-step through new ARM emulator using gdb, using qemu as a reference emulator. Possibly, script operation of two gdb instances, run in parallel, and compare outputs.
+10. Single-step through new ARM emulator using gdb, using qemu as a reference emulator. Possibly, script operation of two gdb instances, run in parallel, and compare outputs.
 
-11) Port emulator to Commodore 64 using vice as a testbed. Write drivers for Commodore 16MB REU and for IDE64 and possibly for Ethernet driver (?!). Run vice in warp mode for testing.
+11. Port emulator to Commodore 64 using vice as a testbed. Write drivers for Commodore 16MB REU and for IDE64 and possibly for Ethernet driver (?!). Run vice in warp mode for testing.
 
-12) Get some poor soul to run the result on practical hardware.
+12. Get some poor soul to run the result on practical hardware.
 
 # Docker notes
 
