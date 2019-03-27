@@ -3217,7 +3217,3 @@ BR2_LINUX_KERNEL_CUSTOM_GIT_VERSION=""
 # External options
 #
 
-#
-# Emulated simple versatile-pb hosted on a 6502 CPU (in /home/jbyrd/skateboard/config/buildroot)
-#
-BR2_EXTERNAL_skateboard_PATH="/home/jbyrd/skateboard/config/buildroot"
