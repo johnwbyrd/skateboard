@@ -11,4 +11,4 @@ apt-get -y update
 apt-get -y install apt-utils
 apt-get -y install build-essential cpio qemu aqemu wget zip git bc \
     libncurses-dev perl libmodule-install-perl nano default-jdk \
-    file python rsync cmake sudo
+    file python rsync cmake sudo autoconf automake libtool texinfo 
