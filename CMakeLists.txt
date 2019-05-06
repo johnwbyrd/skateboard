@@ -52,7 +52,7 @@ ExternalProject_Add_Step( buildroot qemu
 		-net nic,model=rtl8139
 		-s 
 		-S
- 	COMMENT "Launching qemu-system-arm debugging session... press [Ctrl-A] then C to end the session"
+ 	COMMENT "Launching qemu-system-arm debugging session... press [Ctrl-A] C Q [Enter] to end the session"
 	ALWAYS True
 	EXCLUDE_FROM_MAIN True
 	WORKING_DIRECTORY <BINARY_DIR>
@@ -64,8 +64,8 @@ ExternalProject_Add_Step( buildroot qemu
 
 ExternalProject_Add_Step(buildroot gdb
 	COMMAND <BINARY_DIR>/host/bin/arm-linux-gdb
-		-x <BINARY_DIR>/host/arm-buildroot-linux-musleabi/sysroot/usr/share/buildroot/gdbinit
-		-ex 'file <BINARY_DIR>/build/linux-4.18.36/vmlinux'
+		-x <BINARY_DIR>/host/arm-skateboard-linux-musleabi/sysroot/usr/share/buildroot/gdbinit
+		-ex 'file <BINARY_DIR>/build/linux-4.19.36/vmlinux'
 	COMMENT "Launching arm-linux-gdb, please make sure target is running..."
 	ALWAYS True
 	EXCLUDE_FROM_MAIN True
@@ -89,8 +89,8 @@ ExternalProject_add(rspproxy
 	GIT_REPOSITORY https://github.com/johnwbyrd/esp7-rsp-proxy.git
 	GIT_PROGRESS True
 	BUILD_IN_SOURCE True
-	CONFIGURE_COMMAND cd <SOURCE_DIR> && autoreconf -f -i && cd <BINARY_DIR> && <SOURCE_DIR>/configure 
-	BUILD_COMMAND make
+	CONFIGURE_COMMAND ""
+	BUILD_COMMAND cd <SOURCE_DIR> && autoreconf -f -i && cd <BINARY_DIR> && <SOURCE_DIR>/configure && make
 	INSTALL_COMMAND ""
 	TEST_COMMAND ""
 	STEP_TARGETS run
