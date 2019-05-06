@@ -127,6 +127,12 @@ make buildroot-gdb
 
 make buildroot-gdb launches an instance of gdb and tries to connect to an instance of qemu on the local machine. Run this in a different process than make buildroot-qemu.
 
+```
+make rsp-run
+```
+
+make rsp-run launches an RSP proxy along with the emulator, in either 6502 host mode or native host mode.
+
 # Development strategy
 
 Getting a full ARM system emulator to run in the restricted memory of a 6502, even with a memory upgrade, is not easy. We'll need multiple intermediate steps to get the code running on the ultimate targets.
@@ -161,15 +167,15 @@ Phases of development involve the following.
 
 2. Make sure to be able to single-step through debuggable kernel. (Done)
 
-3. Get source-level kernel debugging working with Eclipse. This is technically not required, but it's source level debugging and will save so much time later. See verbose console mode to debug communication with qemu.
+3. Get source-level kernel debugging working with Eclipse. This is technically not required, but it's source level debugging and will save so much time later. See verbose console mode to debug communication with qemu. (Done)
 
-4. Build a virtual gdb remote target which is able to speak as an RSP server. Every instruction needs to be a no-op.
+4. Build a virtual gdb remote target which is able to speak as an RSP server. Every instruction needs to be a no-op. To figure out how memory should be loaded before start_kernel(), build and debug qemu and watch how it handles the -kernel and -dtb flags.
 
 5. Link in the sim6502 code.
 
 6. Allow the gdb stub to get virtual register states and memory states out of the emulator.
 
-7. Set up the emulator to be able to run in two modes. The first mode would permit the ARM emulator to run on the development machine itself, using normal source debugging. The second mode would permit the ARM emulator to run on the virtual 6502, compiled by cc65 from the same source code used in the first mode. The bring-up test would involve running the ARM emulator from an imaginary memory filled with no-op instructions
+7. Set up the emulator to be able to run in two modes. The first mode would permit the ARM emulator to run on the development machine itself, using normal source debugging. The second mode would permit the ARM emulator to run on the virtual 6502, compiled by cc65 from the same source code used in the first mode. The bring-up test would involve running the ARM emulator from an imaginary memory filled with no-op instructions.
 
 7) Get dwelch67's examples running.
 

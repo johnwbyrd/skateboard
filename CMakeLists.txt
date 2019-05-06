@@ -10,7 +10,7 @@ set( BUILDROOT_DEFCONFIG_FILE
 )
 
 set( RSP_PROXY_CONFIG_DIR 
-	${CMAKE_CURRENT_SOURCE_DIR}/config/rspproxy )
+	${CMAKE_CURRENT_SOURCE_DIR}/config/rsp )
 set( RSP_PROXY_CONFIG_FILE
 	${RSP_PROXY_CONFIG_DIR}/arm926ej-s.cfg )
 
@@ -63,9 +63,7 @@ ExternalProject_Add_Step( buildroot qemu
 # directory structure
 
 ExternalProject_Add_Step(buildroot gdb
-	COMMAND <BINARY_DIR>/host/bin/arm-linux-gdb
-		-x <BINARY_DIR>/host/arm-skateboard-linux-musleabi/sysroot/usr/share/buildroot/gdbinit
-		-ex 'file <BINARY_DIR>/build/linux-4.19.36/vmlinux'
+	COMMAND ${CMAKE_CURRENT_SOURCE_DIR}/scripts/run-gdb
 	COMMENT "Launching arm-linux-gdb, please make sure target is running..."
 	ALWAYS True
 	EXCLUDE_FROM_MAIN True
@@ -84,8 +82,8 @@ ExternalProject_add(cc65
 	TEST_COMMAND ""
 )
 
-ExternalProject_add(rspproxy
- 	PREFIX rspproxy
+ExternalProject_add(rsp
+ 	PREFIX rsp
 	GIT_REPOSITORY https://github.com/johnwbyrd/esp7-rsp-proxy.git
 	GIT_PROGRESS True
 	BUILD_IN_SOURCE True
@@ -96,7 +94,7 @@ ExternalProject_add(rspproxy
 	STEP_TARGETS run
 )
 
-ExternalProject_Add_Step(rspproxy run
+ExternalProject_Add_Step(rsp run
 	COMMAND <BINARY_DIR>/src/rsp-proxy ${RSP_PROXY_CONFIG_FILE} 1234 trace
 	COMMENT "Launching rsp-proxy...  [Ctrl-C] to exit the proxy"
 	ALWAYS True
@@ -105,4 +103,4 @@ ExternalProject_Add_Step(rspproxy run
 	USES_TERMINAL True
 )
 
-add_dependencies( buildroot cc65 rspproxy )
+add_dependencies( buildroot cc65 rsp )
