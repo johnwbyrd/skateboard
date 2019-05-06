@@ -25,6 +25,7 @@ GDBINIT_PATH="${GDBINIT_DIR}/gdbinit"
 GDB_PATH="${BUILDROOT_BUILD_DIR}/host/bin/arm-linux-gdb"
 echo ${GDB_PATH}
 echo "set sysroot ${SYSROOT}" > ${GDBINIT_PATH}
+echo "directory ${VMLINUX_DIR}" >> ${GDBINIT_PATH}
 echo "file ${VMLINUX_PATH}" >> ${GDBINIT_PATH}
 echo "target remote localhost:1234" >> ${GDBINIT_PATH}
 echo "b start_kernel" >> ${GDBINIT_PATH}
